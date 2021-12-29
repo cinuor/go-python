@@ -37,6 +37,14 @@ func PyByteArray_FromStringAndSize(str string) *PyObject {
 	return togo(C.PyByteArray_FromStringAndSize(c_str, C.Py_ssize_t(len(str))))
 }
 
+// NOTE: add by fanlizhou
+func PyByteArray_FromBytesAndSize(data []byte) *PyObject {
+	c_data := C.CBytes(data)
+	defer C.free(unsafe.Pointer(c_data))
+
+	return togo(C.PyByteArray_FromStringAndSize(string(c_data), C.Py_ssize_t(len(data))))
+}
+
 // PyObject* PyByteArray_Concat(PyObject *a, PyObject *b)
 // Concat bytearrays a and b and return a new bytearray with the result.
 func PyByteArray_Concat(a, b *PyObject) *PyObject {
