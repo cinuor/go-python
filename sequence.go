@@ -4,7 +4,6 @@ package python
 import "C"
 
 import (
-	"fmt"
 	"unsafe"
 )
 
