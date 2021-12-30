@@ -42,7 +42,8 @@ func PyByteArray_FromStringAndSize(str string) *PyObject {
 func PyByteArray_FromBytesAndSize(data []byte) *PyObject {
 	c_data := C.CBytes(data)
 	defer C.free(unsafe.Pointer(c_data))
-	fmt.Println(len(data))
+	C.puts((*C.char)(c_data))
+	C.fflush(C.stdout)
 
 	return togo(C.PyByteArray_FromStringAndSize((*C.char)(c_data), C.Py_ssize_t(len(data))))
 }
