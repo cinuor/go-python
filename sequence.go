@@ -37,14 +37,20 @@ func PyByteArray_FromStringAndSize(str string) *PyObject {
 	return togo(C.PyByteArray_FromStringAndSize(c_str, C.Py_ssize_t(len(str))))
 }
 
-// NOTE: add by fanlizhou
-func PyByteArray_FromBytesAndSize(data []byte) *PyObject {
-	c_data := C.CBytes(data)
-	defer C.free(unsafe.Pointer(c_data))
-	C.puts((*C.char)(c_data))
-	C.fflush(C.stdout)
+type MyString struct {
+	Str *C.char
+	Len int
+}
 
-	return togo(C.PyByteArray_FromStringAndSize((*C.char)(c_data), C.Py_ssize_t(len(data))))
+// NOTE: add by fanlizhou
+func PyByteArray_FromStringAndSizeWithNoCopy(str string) *PyObject {
+	ms := (*MyString)(unsafe.Pointer(&str))
+	// c_data := C.CBytes(data)
+	// defer C.free(unsafe.Pointer(c_data))
+	// C.puts((*C.char)(c_data))
+	// C.fflush(C.stdout)
+
+	return togo(C.PyByteArray_FromStringAndSize(ms.Str, C.Py_ssize_t(ms.Len)))
 }
 
 // PyObject* PyByteArray_Concat(PyObject *a, PyObject *b)
